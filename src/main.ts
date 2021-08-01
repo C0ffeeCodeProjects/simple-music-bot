@@ -86,7 +86,7 @@ async function play()
 	console.log("now playing: " + list[index].title);
 	const id = list[index].url;
 	stream = await ytdl(id, { quality: "highestaudio", highWaterMark: 1 << 25 });
-	disp = conn.play(stream, { type: "opus", volume: .5 });
+	disp = conn.play(stream, { type: "opus", volume: .25 });
 
 	disp.on("finish", () => onFinish());
 	disp.on("error", e => console.log("error: " + e));
