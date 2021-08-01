@@ -3,11 +3,12 @@ import type { StreamDispatcher, VoiceChannel, VoiceConnection } from "discord.js
 import ytdl from "ytdl-core-discord";
 import ytpl from "ytpl";
 import { config } from "dotenv";
+import "./statuscheck";
 
 config();
 const botKey: string = process.env.botKey;
-const playlistId: string = process.env.playlistId;
 const channelId: string = process.env.channelId;
+let playlistId: string = process.env.playlistId;
 
 const client = new Client();
 let channel: VoiceChannel;
@@ -33,6 +34,19 @@ client.on("message", (msg) => {
 		stream.destroy();
 		onFinish();
 	}
+	if (msg.content.startsWith("!play"))
+	{
+		playlistId = msg.content
+			.replace("!play", "")
+			.replace(" ", "");
+		index = 0;
+		getPlaylist()
+			.then(() => play());
+	}
+	if (msg.content.toLowerCase() === "!currentsong")
+	{
+		msg.reply("Currently playing: " + list[index].title);
+	}
 });
 
 async function joinChannel()
@@ -51,7 +65,6 @@ async function getPlaylist()
 {
 	const res = await ytpl(playlistId);
 	list = res.items;
-	return res.items;
 }
 
 function onFinish()
