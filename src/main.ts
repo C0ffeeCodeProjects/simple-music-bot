@@ -8,6 +8,7 @@ import "./statuscheck";
 config();
 const botKey: string = process.env.botKey;
 const channelId: string = process.env.channelId;
+const channelTextId: string = process.env.channelTextId;
 let playlistId: string = process.env.playlistId;
 
 const client = new Client();
@@ -27,6 +28,8 @@ client.once("ready", () => {
 });
 
 client.on("message", (msg) => {
+	if (msg.channel.id !== channelTextId)
+		return;
 	if (msg.content === "!skip")
 	{
 		console.log("skipping...");
