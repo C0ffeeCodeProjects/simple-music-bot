@@ -30,23 +30,25 @@ client.once("ready", () => {
 client.on("message", (msg) => {
 	if (msg.channel.id !== channelTextId)
 		return;
-	if (msg.content === "!skip")
+	console.log(msg.channel.id);
+	console.log(channelTextId);
+	if (msg.content === ".skip")
 	{
 		console.log("skipping...");
 		stream.pause();
 		stream.destroy();
 		onFinish();
 	}
-	if (msg.content.startsWith("!play"))
+	if (msg.content.startsWith(".play"))
 	{
 		playlistId = msg.content
-			.replace("!play", "")
+			.replace(".play", "")
 			.replace(" ", "");
 		index = 0;
 		getPlaylist()
 			.then(() => play());
 	}
-	if (msg.content.toLowerCase() === "!currentsong")
+	if (msg.content.toLowerCase() === ".currentsong")
 	{
 		msg.reply("Currently playing: " + list[index].title);
 	}
@@ -84,7 +86,7 @@ async function play()
 	console.log("now playing: " + list[index].title);
 	const id = list[index].url;
 	stream = await ytdl(id, { quality: "highestaudio", highWaterMark: 1 << 25 });
-	disp = conn.play(stream, { type: "opus", volume: false });
+	disp = conn.play(stream, { type: "opus", volume: .5 });
 
 	disp.on("finish", () => onFinish());
 	disp.on("error", e => console.log("error: " + e));
