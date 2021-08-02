@@ -10,6 +10,7 @@ const botKey: string = process.env.botKey;
 const channelId: string = process.env.channelId;
 const channelTextId: string = process.env.channelTextId;
 let playlistId: string = process.env.playlistId;
+const volume = Number(process.env.volume ?? .25);
 
 const client = new Client();
 let channel: VoiceChannel;
@@ -86,7 +87,7 @@ async function play()
 	console.log("now playing: " + list[index].title);
 	const id = list[index].url;
 	stream = await ytdl(id, { quality: "highestaudio", highWaterMark: 1 << 25 });
-	disp = conn.play(stream, { type: "opus", volume: .25 });
+	disp = conn.play(stream, { type: "opus", volume: volume });
 
 	disp.on("finish", () => onFinish());
 	disp.on("error", e => console.log("error: " + e));
