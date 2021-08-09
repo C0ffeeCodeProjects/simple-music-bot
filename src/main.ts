@@ -31,8 +31,6 @@ client.once("ready", () => {
 client.on("message", (msg) => {
 	if (msg.channel.id !== channelTextId)
 		return;
-	console.log(msg.channel.id);
-	console.log(channelTextId);
 	if (msg.content === ".skip")
 	{
 		console.log("skipping...");
@@ -90,6 +88,9 @@ async function play()
 	disp = conn.play(stream, { type: "opus", volume: volume });
 
 	disp.on("finish", () => onFinish());
-	disp.on("error", e => console.log("error: " + e));
-	disp.on("unpipe", () => console.log("unpipe, might be because of a poor network connection"));
+	disp.on("error", e => {
+		console.log("error: " + e);
+		play();
+	});
+	disp.on("unpipe", () => console.log("unpiped"));
 }
